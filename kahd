@@ -1,1 +1,64 @@
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import time
 
+# Ganti dengan kredensial Instagram Anda
+USERNAME = ########
+PASSWORD = ********
+
+# Ganti dengan pesan menfess yang ingin diposting
+MENFESS_MESSAGE = "HUT sama siapa nih?"
+
+# Inisialisasi webdriver
+driver = webdriver.Chrome()
+
+def login_instagram():
+    driver.get("https://www.instagram.com/accounts/login/")
+    time.sleep(3)
+    
+    username_input = driver.find_element_by_name("username")
+    password_input = driver.find_element_by_name("password")
+    
+    username_input.send_keys(USERNAME)
+    password_input.send_keys(PASSWORD)
+    password_input.send_keys(Keys.RETURN)
+    
+    time.sleep(5)  # Tunggu sampai proses login selesai
+
+def post_menfess(message):
+    driver.get("https://www.instagram.com/")
+    time.sleep(5)
+    
+    # Klik tombol 'New Post' (ikon plus)
+    new_post_button = driver.find_element_by_xpath('//div[@aria-label="New Post"]')
+    new_post_button.click()
+    
+    time.sleep(3)
+    
+    # Tambahkan file gambar (harus ada file gambar yang dipilih)
+    upload_input = driver.find_element_by_xpath('//input[@type="file"]')
+    upload_input.send_keys('/path/to/your/image.jpg')  # Ganti dengan path ke gambar Anda
+    
+    time.sleep(3)
+    
+    # Klik tombol 'Next'
+    next_button = driver.find_element_by_xpath('//button[contains(text(),"Next")]')
+    next_button.click()
+    
+    time.sleep(3)
+    
+    # Tambahkan pesan menfess
+    caption_input = driver.find_element_by_tag_name('textarea')
+    caption_input.send_keys(message)
+    
+    # Klik tombol 'Share'
+    share_button = driver.find_element_by_xpath('//button[contains(text(),"Share")]')
+    share_button.click()
+    
+    time.sleep(5)
+
+try:
+    login_instagram()
+    post_menfess(MENFESS_MESSAGE)
+finally:
+    driver.quit()
